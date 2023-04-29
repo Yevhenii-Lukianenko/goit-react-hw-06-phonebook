@@ -1,6 +1,4 @@
 import React from 'react';
-import { Container } from './Container/Container';
-import { Section } from './Section/Section';
 import { ContactForm } from './ContactForm/ContactForm';
 import { ContactsList } from './ContactsList/ContactsList';
 import { Filter } from './Filter/Filter';
@@ -12,6 +10,11 @@ export class App extends React.Component {
   };
 
   formSubmitHandler = data => {
+    for (const contact of this.state.contacts) {
+      if (contact.name === data.name) {
+        return alert(`${data.name} is already in contacts.`);
+      }
+    }
     const updatedContacts = [data, ...this.state.contacts];
     this.setState({ contacts: updatedContacts });
   };
@@ -36,21 +39,16 @@ export class App extends React.Component {
 
   render() {
     return (
-      <Container>
-        <Section title="Phonebook">
-          <ContactForm onSubmit={this.formSubmitHandler}></ContactForm>
-        </Section>
-        <Section title="Contacts">
-          <Filter
-            value={this.state.filter}
-            onChange={this.changeFilter}
-          ></Filter>
-          <ContactsList
-            contacts={this.getVisibleContacts()}
-            onDelete={this.deleteContact}
-          ></ContactsList>
-        </Section>
-      </Container>
+      <div>
+        <h1>Phonebook</h1>
+        <ContactForm onSubmit={this.formSubmitHandler}></ContactForm>
+        <h2>Contacts</h2>
+        <Filter value={this.state.filter} onChange={this.changeFilter}></Filter>
+        <ContactsList
+          contacts={this.getVisibleContacts()}
+          onDelete={this.deleteContact}
+        ></ContactsList>
+      </div>
     );
   }
 }
