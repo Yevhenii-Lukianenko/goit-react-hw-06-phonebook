@@ -1,4 +1,5 @@
 import React from 'react';
+import { nanoid } from 'nanoid';
 import { ContactForm } from './ContactForm/ContactForm';
 import { ContactsList } from './ContactsList/ContactsList';
 import { Filter } from './Filter/Filter';
@@ -11,11 +12,11 @@ export class App extends React.Component {
 
   formSubmitHandler = data => {
     for (const contact of this.state.contacts) {
-      if (contact.name === data.name) {
+      if (contact.name.toLowerCase() === data.name.toLowerCase()) {
         return alert(`${data.name} is already in contacts.`);
       }
     }
-    const updatedContacts = [data, ...this.state.contacts];
+    const updatedContacts = [{ ...data, id: nanoid() }, ...this.state.contacts];
     this.setState({ contacts: updatedContacts });
   };
 
@@ -31,9 +32,9 @@ export class App extends React.Component {
     );
   };
 
-  deleteContact = number => {
+  deleteContact = id => {
     this.setState(prevState => ({
-      contacts: prevState.contacts.filter(contact => contact.number !== number),
+      contacts: prevState.contacts.filter(contact => contact.id !== id),
     }));
   };
 
