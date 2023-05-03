@@ -10,13 +10,32 @@ export class App extends React.Component {
     filter: '',
   };
 
+  componentDidMount() {
+    const contacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(contacts);
+
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { contacts } = this.state;
+
+    if (prevState.contacts !== contacts) {
+      localStorage.setItem('contacts', JSON.stringify(contacts));
+    }
+  }
+
   formSubmitHandler = data => {
-    for (const contact of this.state.contacts) {
+    const { contacts } = this.state;
+
+    for (const contact of contacts) {
       if (contact.name.toLowerCase() === data.name.toLowerCase()) {
         return alert(`${data.name} is already in contacts.`);
       }
     }
-    const updatedContacts = [{ ...data, id: nanoid() }, ...this.state.contacts];
+    const updatedContacts = [{ ...data, id: nanoid() }, ...contacts];
     this.setState({ contacts: updatedContacts });
   };
 
