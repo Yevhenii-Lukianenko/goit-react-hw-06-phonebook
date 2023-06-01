@@ -1,8 +1,10 @@
 import { SearchLabel, SearchInput } from './Filter.styled';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setFilter } from 'redux/filtersSlice';
+import { getFilter } from 'redux/selectors';
 
 export const Filter = () => {
+  const filterValue = useSelector(getFilter);
   const dispatch = useDispatch();
 
   const changeFilter = e => {
@@ -12,7 +14,11 @@ export const Filter = () => {
   return (
     <SearchLabel>
       Find contacts by name
-      <SearchInput type="text" onChange={changeFilter}></SearchInput>
+      <SearchInput
+        type="text"
+        value={filterValue}
+        onChange={changeFilter}
+      ></SearchInput>
     </SearchLabel>
   );
 };
